@@ -60,24 +60,37 @@ int get_next_line(const int fd, char **line)
 
     rd = 1;
 	idx = 0;
-	back = ft_strnew(1);
-    buf = malloc(sizeof(BUFF_SIZE));
+	back = malloc(BUFF_SIZE);
+    buf = malloc(BUFF_SIZE);
 	while (rd)
 	{
+        printf("\n\nBoucle Ok\n");
 		if (temp)
+        {
+            printf("Temp existe, on le recupere.\n");
 			buf = temp;
+            temp = NULL;
+        }
 		else
 		{
+            printf("Temp existe pas, on lis depuis le fichier.\n");
 			rd = read(fd, buf, BUFF_SIZE);
 			buf[rd] = '\0';
 		}
 		if ((idx = ft_strchr_idx(buf)) == -1)
-			back = ft_strjoin(back, buf);
+        {
+            printf("Il n'y a pas de /n,");
+            printf(" on tente donc de d'ajouter ' %s ' À ' %s '.   ", buf, back);
+            back = ft_strjoin(back, buf);
+            printf("ce qui donne: ''   %s   ''\n", back);
+        }
 		else
 		{
-			back = ft_strjoin(back, ft_strsub(buf, 0, idx)); // erreur sur la ligne 78 et 79
-			temp = ft_strend(buf, idx);
-			*line = back;
+            printf("Il y a un /n, on ajoute donc la partie avant le /n ");
+			back = ft_strjoin(back, ft_strsub(buf, 0, idx));
+			temp = ft_strend(buf, idx + 1);
+            *line = back;
+            printf("et revoi: %s \n\n\n", back);
 			return (1);
 		}
 	}
@@ -91,7 +104,11 @@ int	main()
 
 	fd = open("text.txt", O_RDONLY);
     get_next_line(fd, &res);
-	printf("%d ---> %s\n", get_next_line(fd, &res), res);
+    //printf("Line: %s \n", res);
+    get_next_line(fd, &res);
+    //printf("Line: %s \n", res);
+    //get_next_line(fd, &res);
+    //printf("Line: %s \n", res);
 	close(fd);
 	return (0);
 }
