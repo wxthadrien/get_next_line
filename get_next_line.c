@@ -60,40 +60,44 @@ int get_next_line(const int fd, char **line)
 
     rd = 1;
 	idx = 0;
-	back = malloc(BUFF_SIZE);
-    buf = malloc(BUFF_SIZE);
-	while (rd)
+    if (!(back = malloc(BUFF_SIZE)) || !(buf = malloc(BUFF_SIZE)))
+        return(-1);
+	while (rd || temp)
 	{
-        //printf("\n\n\n\n\nBoucle Ok\n");
+        printf("\n\n\n\n\nBoucle Ok\n");
 		if (temp)
         {
-            //printf("Temp existe, on le recupere.\n");
+            printf("Temp existe, on le recupere. il vaut ***%s***\n", temp);
+            printf("back vaut en se moment ***%s***\n", back);
 			buf = temp;
             temp = NULL;
         }
 		else
 		{
-            //printf("Temp existe pas, on lis depuis le fichier.\n");
+            printf("Temp existe pas, on lis depuis le fichier.\n");
 			rd = read(fd, buf, BUFF_SIZE);
 			buf[rd] = '\0';
 		}
 		if ((idx = ft_strchr_idx(buf)) == -1)
         {
-            //ft_putstr("Il n'y a pas de /n,");
-            //ft_putstr(" on tente donc de d'ajouter buf au rest ");
+            ft_putstr("Il n'y a pas de /n, on ajoute donc buf a back\n");
             back = ft_strjoin(back, buf);
-            //ft_putstr("Ca fonctionne");
+            ft_putstr(" Ca fonctionne, ce qui donne: \n");
+            printf("%s\n", back);
         }
 		else
 		{
-            //ft_putstr("Il y a un /n, on ajoute donc la partie avant le /n ");
+            ft_putstr("Il y a un /n, on ajoute donc la partie avant le /n ");
 			back = ft_strjoin(back, ft_strsub(buf, 0, idx));
 			temp = ft_strend(buf, idx + 1);
             *line = back;
-            //ft_putstr("et revoi le resultat \n\n\n\n\n-------------------------------------------\n\n\n\n\n");
+            free(back);
+            ft_putstr("et revoi le resultat qui est: \n");
 			return (1);
 		}
 	}
+    *line = back;
+    free(back);
 	return (0);
 }
 
@@ -104,11 +108,11 @@ int	main()
 
 	fd = open("text.txt", O_RDONLY);
     get_next_line(fd, &res);
-    printf("Line: %s \n", res);
+    printf("%s\n-------------------------------------------\n\n\n\n\n", res);
     get_next_line(fd, &res);
-    printf("Line: %s \n", res);
+    printf("%s\n-------------------------------------------\n\n\n\n\n", res);
     get_next_line(fd, &res);
-    printf("Line: %s \n", res);
+    printf("%s\n-------------------------------------------\n\n\n\n\n", res);
 	close(fd);
 	return (0);
 }
