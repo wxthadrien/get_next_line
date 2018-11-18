@@ -39,7 +39,7 @@ char *ft_strend(char *str, int idx)
 int ft_strchr_idx(char *str)
 {
 	int i;
-
+    
 	i = 0;
 	while (str[i])
 	{
@@ -64,33 +64,33 @@ int get_next_line(const int fd, char **line)
     buf = malloc(BUFF_SIZE);
 	while (rd)
 	{
-        printf("\n\nBoucle Ok\n");
+        //printf("\n\n\n\n\nBoucle Ok\n");
 		if (temp)
         {
-            printf("Temp existe, on le recupere.\n");
+            //printf("Temp existe, on le recupere.\n");
 			buf = temp;
             temp = NULL;
         }
 		else
 		{
-            printf("Temp existe pas, on lis depuis le fichier.\n");
+            //printf("Temp existe pas, on lis depuis le fichier.\n");
 			rd = read(fd, buf, BUFF_SIZE);
 			buf[rd] = '\0';
 		}
 		if ((idx = ft_strchr_idx(buf)) == -1)
         {
-            printf("Il n'y a pas de /n,");
-            printf(" on tente donc de d'ajouter ' %s ' À ' %s '.   ", buf, back);
+            //ft_putstr("Il n'y a pas de /n,");
+            //ft_putstr(" on tente donc de d'ajouter buf au rest ");
             back = ft_strjoin(back, buf);
-            printf("ce qui donne: ''   %s   ''\n", back);
+            //ft_putstr("Ca fonctionne");
         }
 		else
 		{
-            printf("Il y a un /n, on ajoute donc la partie avant le /n ");
+            //ft_putstr("Il y a un /n, on ajoute donc la partie avant le /n ");
 			back = ft_strjoin(back, ft_strsub(buf, 0, idx));
 			temp = ft_strend(buf, idx + 1);
             *line = back;
-            printf("et revoi: %s \n\n\n", back);
+            //ft_putstr("et revoi le resultat \n\n\n\n\n-------------------------------------------\n\n\n\n\n");
 			return (1);
 		}
 	}
@@ -104,11 +104,11 @@ int	main()
 
 	fd = open("text.txt", O_RDONLY);
     get_next_line(fd, &res);
-    //printf("Line: %s \n", res);
+    printf("Line: %s \n", res);
     get_next_line(fd, &res);
-    //printf("Line: %s \n", res);
-    //get_next_line(fd, &res);
-    //printf("Line: %s \n", res);
+    printf("Line: %s \n", res);
+    get_next_line(fd, &res);
+    printf("Line: %s \n", res);
 	close(fd);
 	return (0);
 }
