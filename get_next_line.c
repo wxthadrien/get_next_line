@@ -20,99 +20,81 @@
 #include <fcntl.h>
 #include "get_next_line.h"
 
-char *ft_strend(char *str, int idx)
-{
-	char *ret;
-	int i;
 
-	i = 0;
-	ret = malloc(sizeof(ft_strlen(str) + 1));
-	while (str[idx])
-	{
-		ret[i] = str[idx];
-		i++;
-		idx++;
-	}
-	return (ret);
-}
-
+// La fonction recherche dans le string un \n et revoi sa position dans la string.
 int ft_strchr_idx(char *str)
 {
-	int i;
+    int i;
     
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '\n')
-			return (i);
-		i++;
-	}
-	return (-1);
+    i = 0;
+    while (str[i])
+    {
+        if (str[i] == '\n')
+            return (i);
+        i++;
+    }
+    return (-1);
 }
 
 int get_next_line(const int fd, char **line)
 {
-	int rd;
-	char *buf;
-	static char *temp;
-	char *back;
-	int idx;
-
+    int rd; //Code renvoyer par la fonction read
+    char *buf; //Variable ou se trouve la string lue par read ou ce que contenais temp.
+    static char *temp; //variable qui stoque la partie apres le \n d'une sting lue par read.
+    char *back; //Ligne a renvoyer.
+    int idx; //Index du \n dans le string.
+    
     rd = 1;
-	idx = 0;
-    if (!(back = malloc(BUFF_SIZE)) || !(buf = malloc(BUFF_SIZE)))
+    idx = 0;
+    if (!(back = ft_strnew(0)) || !(buf = ft_strnew(BUFF_SIZE + 1)) || !(*line = ft_strnew(0)))
         return(-1);
-	while (rd || temp)
-	{
-        printf("\n\n\n\n\nBoucle Ok\n");
-		if (temp)
+    while (rd > 0 || temp)
+    {
+        if (temp)
         {
-            printf("Temp existe, on le recupere. il vaut ***%s***\n", temp);
-            printf("back vaut en se moment ***%s***\n", back);
-			buf = temp;
-            temp = NULL;
+            buf = ft_strdup(temp);
+            ft_strdel(&temp);
         }
-		else
-		{
-            printf("Temp existe pas, on lis depuis le fichier.\n");
-			rd = read(fd, buf, BUFF_SIZE);
-			buf[rd] = '\0';
-		}
-		if ((idx = ft_strchr_idx(buf)) == -1)
+        else
         {
-            ft_putstr("Il n'y a pas de /n, on ajoute donc buf a back\n");
+            rd = read(fd, buf, BUFF_SIZE);
+            buf[rd] = '\0';
+        }
+        if ((idx = ft_strchr_idx(buf)) == -1)
             back = ft_strjoin(back, buf);
-            ft_putstr(" Ca fonctionne, ce qui donne: \n");
-            printf("%s\n", back);
+        else
+        {
+            back = ft_strjoin(back, ft_strsub(buf, 0, idx));
+            temp = ft_strsub(buf, idx + 1, (ft_strlen(buf) - ft_strlen(ft_strsub(buf, 0, idx))));
+            *line = ft_strdup(back);
+            ft_strdel(&back);
+            return (1);
         }
-		else
-		{
-            ft_putstr("Il y a un /n, on ajoute donc la partie avant le /n ");
-			back = ft_strjoin(back, ft_strsub(buf, 0, idx));
-			temp = ft_strend(buf, idx + 1);
-            *line = back;
-            free(back);
-            ft_putstr("et revoi le resultat qui est: \n");
-			return (1);
-		}
-	}
-    *line = back;
-    free(back);
-	return (0);
+    }
+    return (0);
 }
 
-int	main()
-{
-	int	fd;
-	char *res;
 
-	fd = open("text.txt", O_RDONLY);
-    get_next_line(fd, &res);
-    printf("%s\n-------------------------------------------\n\n\n\n\n", res);
-    get_next_line(fd, &res);
-    printf("%s\n-------------------------------------------\n\n\n\n\n", res);
-    get_next_line(fd, &res);
-    printf("%s\n-------------------------------------------\n\n\n\n\n", res);
-	close(fd);
-	return (0);
+int    main(int ac, char **av)
+{
+    int            fd;
+    char        *line;
+    int            ret;
+    
+    line = NULL;
+    if (ac < 2)
+    {
+        ft_putendl("no entry");
+        return (0);
+    }
+
+    fd = open(av[1], O_RDONLY);
+    while ((ret = get_next_line(fd, &line)) == 1)
+    {
+        printf("LINE = %s\n", line);
+        ft_strdel(&line);
+    }
+    close(fd);
+    printf("%d", ret);
+    return(0);
 }

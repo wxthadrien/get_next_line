@@ -16,8 +16,9 @@ all:
 			cd libft && make && cd ..
 			gcc $(FLAGS) get_next_line.c -L libft -lft -I libft/libft.h
 			cd libft && make fclean && cd ..
-fclean:
+clean:
+			cd libft && make clean && cd ..
+fclean: clean
 			rm -f a.out
-
 re: fclean all
 

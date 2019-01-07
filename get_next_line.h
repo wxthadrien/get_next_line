@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#define BUFF_SIZE 100
+#define BUFF_SIZE 1
 
 int get_next_line(const int fd, char **line);
 int ft_strchr_idx(char *str);
