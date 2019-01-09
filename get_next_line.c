@@ -6,20 +6,11 @@
 /*   By: hmeys <hmeys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 12:52:56 by hmeys             #+#    #+#             */
-/*   Updated: 2019/01/09 11:11:53 by hmeys            ###   ########.fr       */
+/*   Updated: 2019/01/09 11:51:58 by hmeys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <string.h>
-#include "libft/libft.h"
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
 #include "get_next_line.h"
-
 
 // La fonction recherche dans le string un \n et revoi sa position dans la string.
 int ft_strchr_idx(char *str)
