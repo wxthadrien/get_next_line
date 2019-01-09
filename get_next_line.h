@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmeys <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: hmeys <hmeys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 12:52:19 by hmeys             #+#    #+#             */
-/*   Updated: 2018/11/14 12:52:53 by hmeys            ###   ########.fr       */
+/*   Updated: 2019/01/08 14:14:27 by hmeys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#define BUFF_SIZE 1
+#define BUFF_SIZE 10
 
 int get_next_line(const int fd, char **line);
 int ft_strchr_idx(char *str);

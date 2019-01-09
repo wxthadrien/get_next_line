@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmeys <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: hmeys <hmeys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 12:52:56 by hmeys             #+#    #+#             */
-/*   Updated: 2018/11/14 13:53:28 by hmeys            ###   ########.fr       */
+/*   Updated: 2019/01/09 11:11:53 by hmeys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 int ft_strchr_idx(char *str)
 {
     int i;
-    
+
     i = 0;
     while (str[i])
     {
@@ -43,7 +43,7 @@ int get_next_line(const int fd, char **line)
     static char *temp; //variable qui stoque la partie apres le \n d'une sting lue par read.
     char *back; //Ligne a renvoyer.
     int idx; //Index du \n dans le string.
-    
+
     rd = 1;
     idx = 0;
     if (!(back = ft_strnew(0)) || !(buf = ft_strnew(BUFF_SIZE + 1)) || !(*line = ft_strnew(0)))
@@ -71,30 +71,34 @@ int get_next_line(const int fd, char **line)
             return (1);
         }
     }
+    *line = ft_strdup(back);
+    ft_strdel(&back);
     return (0);
 }
 
-
-int    main(int ac, char **av)
+int     main(int argc, char **argv)
 {
-    int            fd;
-    char        *line;
-    int            ret;
-    
-    line = NULL;
-    if (ac < 2)
+    int fd;
+    char *line;
+    int ret;
+
+    if (argc < 2)
+        printf("Erreur d'entrée");
+    else
     {
-        ft_putendl("no entry");
+        if ((fd = open(argv[1], O_RDONLY)) < 1)
+            return(printf("Open Error"));
+        while((ret = get_next_line(fd, &line)) != 0)
+        {
+            if (ret > 0)
+                printf("=--  %s  --=     returned value: %d\n", line, ret);
+            else
+                printf("error code %d", ret);
+        }
+        //printf("exit return value: %d\n", ret);
+        printf("=--  %s  --=     returned value: %d\n", line, ret);
+        close(fd);
         return (0);
     }
-
-    fd = open(av[1], O_RDONLY);
-    while ((ret = get_next_line(fd, &line)) == 1)
-    {
-        printf("LINE = %s\n", line);
-        ft_strdel(&line);
-    }
-    close(fd);
-    printf("%d", ret);
-    return(0);
+    return (-1);
 }

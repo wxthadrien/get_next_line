@@ -1,5 +1,0 @@
-Get_Next_Line:
-Bonjour tous le mode.
-Comment allez vous ?
-Moi je vais bien, cette ligne fait plus de 30 caractères.
-Fin du test.
