@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strsub.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmeys <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: hmeys <hmeys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/16 15:06:10 by hmeys             #+#    #+#             */
-/*   Updated: 2018/10/29 14:40:29 by hmeys            ###   ########.fr       */
+/*   Updated: 2019/01/09 11:33:48 by hmeys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	*ft_strsub(char const *s, unsigned int start, size_t len)
 {
 	char	*new;
 	int		i;
-	int		y;
+	size_t	y;
 
 	y = 0;
 	i = start;
@@ -26,7 +26,7 @@ char	*ft_strsub(char const *s, unsigned int start, size_t len)
 		return (NULL);
 	if (s != NULL)
 	{
-		while (y < (int)len)
+		while (y < len)
 		{
 			new[y] = s[i];
 			y++;

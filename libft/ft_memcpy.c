@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmeys <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: hmeys <hmeys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/09 11:51:51 by hmeys             #+#    #+#             */
-/*   Updated: 2018/10/27 11:25:24 by hmeys            ###   ########.fr       */
+/*   Updated: 2019/01/09 11:25:41 by hmeys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 	char		*pdest;
 	const char	*psrc;
 
-	psrc = NULL;
-	pdest = NULL;
 	pdest = dst;
 	psrc = src;
 	i = 0;
