@@ -6,7 +6,7 @@
 /*   By: hmeys <hmeys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 12:52:56 by hmeys             #+#    #+#             */
-/*   Updated: 2019/01/09 16:00:08 by hmeys            ###   ########.fr       */
+/*   Updated: 2019/01/10 11:22:12 by hmeys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,23 @@ int ft_strchr_idx(char *str)
     return (-1);
 }
 
-/*
-fonction endl qui serais appeller quand read revois - que la taille du BUFF_SIZE et qu'il n'y a pas de /n
-et qui revairai donc la derniere ligne dans le pointeur de line puis renvoy 1. (if.. return(endl(back, buf, line)); )
-
-int endl(**line, **back)
+int ft_endl(char **line, char **buf, char **back)
 {
+  write(1, "On rentre dans la nouvelle fonction.....\n\n\n", 45);
+  if (ft_strlen(*buf) == 0)
+  {
+    write(1, "OK (0)\n", 7);
+    return(0);
+  }
+  *back = ft_strjoin(*back, *buf);
   *line = ft_strdup(*back);
+  write(1, "Line vaut apres:\n", 18);
+  ft_putstr(*line);
+  ft_strdel(buf);
   ft_strdel(back);
-  return(0);
+  write(1, "\n\nOK (1)\n", 11);
+  return(1);
 }
-*/
 
 int get_next_line(const int fd, char **line)
 {
@@ -69,22 +75,17 @@ int get_next_line(const int fd, char **line)
         {
             printf("temp n'existe pas, on lis depuis le fichier.....");
             rd = read(fd, buf, BUFF_SIZE);
-            /*
-            if (rd = 0)
-            {
-              endl(line, &back);
-              return 1
-            }
-            */
             buf[rd] = '\0';
             printf("OK (rd = %d)\n", rd);
+            if (rd < BUFF_SIZE && (ft_strchr_idx(buf) == - 1))
+              return(ft_endl(line, &buf, &back));
         }
         if ((idx = ft_strchr_idx(buf)) == -1)
         {
             write(1, "il n'y a pas de /n, on ajoute buf a back.....\n", 45);
             //printf("---back: %s  ---buf: %s\n", back, buf);
             //printf("il n'y a pas de /n, on ajoute buf a back.....");
-            back = ft_strjoin(back, ft_strsub(buf, 0, (ft_strlen(buf) - 1)));
+            back = ft_strjoin(back, ft_strsub(buf, 0, ft_strlen(buf)));
             write(1, "OK\n", 3);
             //printf("OK\n");
         }
@@ -96,11 +97,13 @@ int get_next_line(const int fd, char **line)
             temp = ft_strsub(buf, idx + 1, (ft_strlen(buf) - ft_strlen(ft_strsub(buf, 0, idx))));
             printf("OK\n");
             *line = ft_strdup(back);
+            ft_strdel(&buf);
             ft_strdel(&back);
             return (1);
         }
     }
     *line = ft_strdup(back);
+    ft_strdel(&buf);
     ft_strdel(&back);
     return (0);
 }
@@ -124,8 +127,6 @@ int     main(int argc, char **argv)
             else
                 printf("error code %d", ret);
         }
-        //printf("exit return value: %d\n", ret);
-        printf("=--  %s  --=     returned value: %d\n\n\n", line, ret);
         close(fd);
         return (0);
     }

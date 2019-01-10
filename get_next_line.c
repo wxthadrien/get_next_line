@@ -6,13 +6,12 @@
 /*   By: hmeys <hmeys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 12:52:56 by hmeys             #+#    #+#             */
-/*   Updated: 2019/01/09 11:51:58 by hmeys            ###   ########.fr       */
+/*   Updated: 2019/01/10 11:25:42 by hmeys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-// La fonction recherche dans le string un \n et revoi sa position dans la string.
 int ft_strchr_idx(char *str)
 {
     int i;
@@ -25,6 +24,17 @@ int ft_strchr_idx(char *str)
         i++;
     }
     return (-1);
+}
+
+int ft_endl(char **line, char **buf, char **back)
+{
+  if (ft_strlen(*buf) == 0)
+    return(0);
+  *back = ft_strjoin(*back, *buf);
+  *line = ft_strdup(*back);
+  ft_strdel(buf);
+  ft_strdel(back);
+  return(1);
 }
 
 int get_next_line(const int fd, char **line)
@@ -50,19 +60,23 @@ int get_next_line(const int fd, char **line)
         {
             rd = read(fd, buf, BUFF_SIZE);
             buf[rd] = '\0';
+            if (rd < BUFF_SIZE && (ft_strchr_idx(buf) == - 1))
+              return(ft_endl(line, &buf, &back));
         }
         if ((idx = ft_strchr_idx(buf)) == -1)
-            back = ft_strjoin(back, buf);
+            back = ft_strjoin(back, ft_strsub(buf, 0, ft_strlen(buf)));
         else
         {
             back = ft_strjoin(back, ft_strsub(buf, 0, idx));
             temp = ft_strsub(buf, idx + 1, (ft_strlen(buf) - ft_strlen(ft_strsub(buf, 0, idx))));
             *line = ft_strdup(back);
+            ft_strdel(&buf);
             ft_strdel(&back);
             return (1);
         }
     }
     *line = ft_strdup(back);
+    ft_strdel(&buf);
     ft_strdel(&back);
     return (0);
 }
@@ -82,12 +96,10 @@ int     main(int argc, char **argv)
         while((ret = get_next_line(fd, &line)) != 0)
         {
             if (ret > 0)
-                printf("=--  %s  --=     returned value: %d\n", line, ret);
+                printf("%s\n", line);
             else
                 printf("error code %d", ret);
         }
-        //printf("exit return value: %d\n", ret);
-        printf("=--  %s  --=     returned value: %d\n", line, ret);
         close(fd);
         return (0);
     }
